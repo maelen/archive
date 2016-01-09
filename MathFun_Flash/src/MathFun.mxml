@@ -1,0 +1,157 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:Application xmlns:fx="http://ns.adobe.com/mxml/2009"
+    xmlns:s="library://ns.adobe.com/flex/spark"
+    xmlns:mx="library://ns.adobe.com/flex/mx">
+
+    <fx:Script><![CDATA[
+import flash.text.TextFormat;
+    private static const RED:uint = 0xFF0000;
+    private static const GREEN:uint = 0x00FF00;
+    private static const BLUE:uint = 0x0000FF;
+    private static const BLACK:uint = 0x000000;
+    private static const WHITE:uint = 0xFFFFFF;
+    private static const CYAN:uint = 0x00FFFF;
+    private static const MAGENTA:uint = 0xFF00FF;
+    private static const YELLOW:uint = 0xFFFF00;
+    private static const LIGHT_GREY:uint = 0xCCCCCC;
+    private static const MID_GREY:uint = 0x999999;
+    private static const DARK_GREY:uint = 0x666666;
+      
+    public function calculate():void {
+        var a:uint;
+        var b:uint;
+        var c:uint;
+        const min:Number = 1;
+        const max:Number = 12;
+        var numbersSelected:Boolean = false;
+        var operatorsSelected:Boolean = false;
+        var operator:uint = 0;
+        var strOperator:String;
+        const opPlus:uint = 0;
+        const opMinus:uint = 1;
+        const opMult:uint = 2;
+        const opDiv:uint = 3;
+        var i:uint;
+        for (i=0; i < grp_number.numElements; i++ )
+        {
+            numbersSelected = CheckBox(grp_number.getElementAt(i)).selected;
+            if (numbersSelected)
+                break;
+        }
+        for (i=0; i < grp_operator.numElements; i++ )
+        {
+            operatorsSelected = CheckBox(grp_operator.getElementAt(i)).selected;
+            if (operatorsSelected)
+                break;
+        }
+        if (numbersSelected && operatorsSelected)
+        {
+            do
+            {
+                operator = Math.round(Math.random()*3);
+            } while(CheckBox(grp_operator.getElementAt(operator)).selected == false)         
+            do
+            {
+                a = Math.round(Math.random()*(max-min))+min;
+            } while(CheckBox(grp_number.getElementAt(a-1)).selected == false)
+            b = min + Math.random() * (12 - min)
+            if (operator == opPlus)
+            {
+                strOperator = "+"
+                c = a + b
+            }
+            else if (operator == opMinus)
+            {
+                strOperator = "-"
+                c = b
+                b = a
+                a = c + b
+            }
+            else if (operator == opMult)
+            {
+                strOperator = "*"
+                c = a * b 
+            }
+            else if (operator == opDiv)
+            {
+                strOperator = "/"
+                c = b
+                b = a
+                a = c * b
+            }
+            strEquation.text = String(a) + " " + strOperator + " " + String(b) + " = "
+            strAns.text = String(c)
+        }
+    }
+    
+    public function compare():void {
+        if (strInput.text == strAns.text)
+        { 
+           strAns.setStyle("color", GREEN);
+        }
+        else
+        {
+           strAns.setStyle("color", RED);
+        }
+    }
+    ]]></fx:Script>
+
+    
+    <s:controlBarContent>
+        <s:VGroup>
+        <s:HGroup id="grp_operator">
+            <!-- plus checkbox -->
+            <s:CheckBox id="ckbPlus" label=" +" />
+            <!-- minus checkbox -->
+            <s:CheckBox id="ckbMinus" label="-" />
+            <!-- multiplication checkbox -->
+            <s:CheckBox id="ckbMult" label="*" />
+            <!-- division checkbox -->
+            <s:CheckBox id="ckbDiv" label="/" />
+        </s:HGroup>        
+        <s:HGroup id="grp_number">
+            <!-- 1 checkbox -->
+            <s:CheckBox id="ckb_1"  label="1" />
+            <!-- 2 checkbox -->
+            <s:CheckBox id="ckb_2"  label="2" />
+            <!-- 3 checkbox -->
+            <s:CheckBox id="ckb_3"  label="3" />
+            <!-- 4 checkbox -->
+            <s:CheckBox id="ckb_4"  label="4" />
+            <!-- 5 checkbox -->
+            <s:CheckBox id="ckb_5"  label="5" />
+            <!-- 6 checkbox -->
+            <s:CheckBox id="ckb_6"  label="6" />
+            <!-- 7 checkbox -->
+            <s:CheckBox id="ckb_7"  label="7" />
+            <!-- 8 checkbox -->
+            <s:CheckBox id="ckb_8"  label="8" />
+            <!-- 9 checkbox -->
+            <s:CheckBox id="ckb_9"  label="9" />
+            <!-- 10 checkbox -->
+            <s:CheckBox id="ckb_10" label="10" />
+            <!-- 11 checkbox -->
+            <s:CheckBox id="ckb_11" label="11" />
+            <!-- 12 checkbox -->
+            <s:CheckBox id="ckb_12" label="12" />
+        </s:HGroup>
+        <s:HGroup>
+            <!-- Countdown Text entry -->
+            <s:CheckBox id="ckbCountdown" label="Countdown" />
+        </s:HGroup>
+        </s:VGroup>
+    </s:controlBarContent>
+    
+    <s:Panel title="MathFun" width="90%" height="90%">
+        <s:layout>
+            <s:VerticalLayout paddingLeft="10" paddingRight="10"
+               paddingTop="10" paddingBottom="10" />
+        </s:layout>
+        <s:HGroup>
+            <mx:TextInput id="strEquation"  editable="false" />
+            <mx:TextInput id="strInput" enter="compare();calculate();" editable="true" />
+            <mx:TextInput id="strAns"  editable="false" visible="false" />
+        </s:HGroup>
+        <mx:Button label="Start" click="calculate();" />
+    </s:Panel>
+</s:Application>
